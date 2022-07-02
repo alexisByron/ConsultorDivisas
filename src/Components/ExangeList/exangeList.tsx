@@ -29,14 +29,11 @@ const ExangeList = ({ navigation }: any) => {
   }
 
   const onPressIcon = async (item: any) => {
-    let responseApi = await Api.getValueToday(item.key)
-    try {
-      const key = Object.keys(responseApi)[0];
-      const data = responseApi[key][0];
-      navigation.navigate('ValueToday', { Fecha: data.Fecha, Nombre: item.label, Valor: data.Valor, UMedida: item.denominacion })
-    } catch (error) {
-      Alert.alert(responseApi.message)
-    }
+    //let responseApi = await Api.getValueToday(item.key)
+    let responseApiLast10Days = await Api.getValueAfterDate(item.key)
+    const key = Object.keys(responseApiLast10Days)[0];
+    const dataLast10Days = responseApiLast10Days[key];
+    navigation.navigate('ValueToday', { Nombre: item.label, UMedida: item.denominacion, ultimosRegistros: dataLast10Days })
   }
 
   return (
