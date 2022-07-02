@@ -4,37 +4,53 @@ import { styles } from './styles';
 import { Icon } from 'react-native-elements'
 import { Api } from '../../Services/ValorDenominaciones/api';
 
-const ExangeList = () => {
+const ExangeList = ({ navigation }: any) => {
   const exanges = [
-    { label: 'Dólar', denominacion: 'Pesos', key:'dolar'},
-    { label: 'Euro', denominacion: 'Pesos' ,key:'euro'},
-    { label: 'IPC', denominacion: 'Porcentaje' ,key:'ipc'},
-    { label: 'UF', denominacion: 'Pesos' ,key:'uf'},
-    { label: 'UTM', denominacion: 'Pesos' ,key:'utm'},
+    { label: 'Dólar', denominacion: 'Pesos', key: 'dolar' },
+    { label: 'Euro', denominacion: 'Pesos', key: 'euro' },
+    { label: 'IPC', denominacion: 'Porcentaje', key: 'ipc' },
+    { label: 'UF', denominacion: 'Pesos', key: 'uf' },
+    { label: 'UTM', denominacion: 'Pesos', key: 'utm' },
   ];
 
   const onPressExange = async (item: any) => {
-    Alert.alert(`select ${item.label}`)
+    let responseApi = await Api.getValueByDate(item.key);
+    try {
+      if (responseApi.statusCode != 404) {
+        const key = Object.keys(responseApi)[0];
+        navigation.navigate('HistoryList', { dataHistory: responseApi[key], name: item.label })
+      } else {
+        Alert.alert(responseApi.message)
+      }
+    } catch (error) {
+      Alert.alert(responseApi.message)
+    }
 
-     //let a =await  Api.getValueToday(item.key)
+  }
 
-     const date = Date.now;
-     let a =await  Api.getValueByDate(date,item.key)
-     console.log(a)
+  const onPressIcon = async (item: any) => {
+    let responseApi = await Api.getValueToday(item.key)
+    try {
+      const key = Object.keys(responseApi)[0];
+      const data = responseApi[key][0];
+      navigation.navigate('ValueToday', { Fecha: data.Fecha, Nombre: item.label, Valor: data.Valor, UMedida: item.denominacion })
+    } catch (error) {
+      Alert.alert(responseApi.message)
+    }
   }
 
   return (
     <View >
-      <Text style={styles.titleText}>Indicadores</Text>
+      <Text style={styles.titleText}>Indicadores Economicos</Text>
       <FlatList
         data={exanges}
         renderItem={({ item }) =>
-          <Pressable style={styles.listElement} onPress={() => onPressExange(item)}>
-            <View style={styles.flex1}>
+          <View style={styles.listElement} >
+            <Pressable style={styles.flex1} onPress={() => onPressExange(item)}>
               <Text style={styles.exangeText}>{item.label}</Text>
               <Text style={styles.denominatinText} >{item.denominacion}</Text>
-            </View>
-            <View style={styles.iconsContent}>
+            </Pressable>
+            <Pressable style={styles.iconsContent} onPress={() => onPressIcon(item)}>
               <View style={styles.row}>
                 <Icon
                   name='info-outline'
@@ -50,8 +66,8 @@ const ExangeList = () => {
                   tvParallaxProperties={null}
                 />
               </View>
-            </View>
-          </Pressable>
+            </Pressable>
+          </View>
         }
       />
     </View>

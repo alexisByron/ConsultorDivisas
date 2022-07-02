@@ -14,8 +14,10 @@ export class Api {
         return data;
     }
 
-    static async getValueByDate(date: any,divisa:string): Promise<any> {
-        const data = await HttpService.get<any>(`/${divisa}/${'2010'}/${'10'}`);
+    static async getValueByDate(divisa:string): Promise<any> {
+        let today = new Date();
+        console.log(today.getFullYear());
+        const data = await HttpService.get<any>(`/${divisa}/${today.getFullYear()}/${today.getMonth()}`);
         return data;
     }
 }

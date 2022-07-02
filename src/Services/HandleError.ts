@@ -15,7 +15,7 @@ export const handlerError = <T>(error: AxiosError): any => {
     };
     switch (error.response?.status) {
         case EHttpStatus.NotFound:
-            defultResponse.message = 'Aun no se ha cargado informacion de este dia, intente nuevamente';
+            defultResponse.message = 'Aun no se ha cargado informacion de este dia, intente mas tarde';
             defultResponse.statusCode = EHttpStatus.NotFound;
             return defultResponse
         default:
