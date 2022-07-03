@@ -30,14 +30,8 @@ const ExangeList = ({ navigation }: any) => {
   }
 
   const onPressIcon = async (item: any) => {
-    let responseApi: any;
-    if (item.key === 'ipc' || item.key === 'utm') {
-      //info only one result
-      responseApi = await Api.getValueToday(item.key);
-    } else {
-      //info last 10 days
-      responseApi = await Api.getValueAfterDate(item.key)
-    }
+  
+   const responseApi = await Api.getValueAfterDate(item.key)
 
     if (responseApi.statusCode === 404) {
       Alert.alert('No se ha cargado el registro del dia actual.', 'intente mas tarde')

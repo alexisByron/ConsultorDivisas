@@ -32,8 +32,10 @@ export class Api {
     */
     static async getValueAfterDate(divisa: string): Promise<any> {
         var myPastDate = new Date();
-        myPastDate.setDate(myPastDate.getDate() - 10);//myPastDate is now 10 days in the past
-        const data = await HttpService.get<any>(`/${divisa}/posteriores/${myPastDate.getFullYear()}/${myPastDate.getMonth() + 1}/dias/${myPastDate.getDate()}`);
+        divisa !== 'ipc' && divisa !== 'utm' ? myPastDate.setDate(myPastDate.getDate() - 10) : null;//myPastDate is now 10 days in the past
+        const routeLast10Days = `/${divisa}/posteriores/${myPastDate.getFullYear()}/${myPastDate.getMonth() + 1}/dias/${myPastDate.getDate()}`
+        const routeYear = `/${divisa}/posteriores/${myPastDate.getFullYear() - 1}/01`
+        const data = await HttpService.get<any>(divisa === 'ipc' || divisa === 'utm' ? routeYear : routeLast10Days);
         return data;
     }
 }

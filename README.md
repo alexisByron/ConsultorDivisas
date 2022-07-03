@@ -8,7 +8,7 @@
 
 * Instalacion por primera vez https://reactnative.dev/docs/environment-setup
 
-* Run in terminal npm i
+* Run in terminal npm i --legacy-peer-deps
 
     * En caso de Android: 
     * Instalar JAVA (openjdk recomendado).

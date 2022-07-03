@@ -80,7 +80,7 @@ const ValueToday = ({ navigation, route }: any) => {
             backgroundGradientTo: 'blue',
             color: (opacity = 3) => `rgba(255, 255, 255, ${opacity})`
           }}
-          verticalLabelRotation={30}
+          verticalLabelRotation={65}
         />
       </View>
 
