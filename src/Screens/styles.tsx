@@ -17,5 +17,8 @@ export const styles = StyleSheet.create({
     textSecondary:{
         color:'black',
         fontSize:15
+    },
+    chartView:{
+        marginTop: 50
     }
 });

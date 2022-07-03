@@ -5,7 +5,8 @@ import { Icon } from 'react-native-elements'
 import { Api } from '../../Services/ValorDenominaciones/api';
 
 const ExangeList = ({ navigation }: any) => {
-  const exanges = [
+  //data dummy to use as exchanges
+  const exchanges = [
     { label: 'Dólar', denominacion: 'Pesos', key: 'dolar' },
     { label: 'Euro', denominacion: 'Pesos', key: 'euro' },
     { label: 'IPC', denominacion: 'Porcentaje', key: 'ipc' },
@@ -29,18 +30,29 @@ const ExangeList = ({ navigation }: any) => {
   }
 
   const onPressIcon = async (item: any) => {
-    //let responseApi = await Api.getValueToday(item.key)
-    let responseApiLast10Days = await Api.getValueAfterDate(item.key)
-    const key = Object.keys(responseApiLast10Days)[0];
-    const dataLast10Days = responseApiLast10Days[key];
-    navigation.navigate('ValueToday', { Nombre: item.label, UMedida: item.denominacion, ultimosRegistros: dataLast10Days })
+    let responseApi: any;
+    if (item.key === 'ipc' || item.key === 'utm') {
+      //info only one result
+      responseApi = await Api.getValueToday(item.key);
+    } else {
+      //info last 10 days
+      responseApi = await Api.getValueAfterDate(item.key)
+    }
+
+    if (responseApi.statusCode === 404) {
+      Alert.alert('No se ha cargado el registro del dia actual.', 'intente mas tarde')
+    } else {
+      const key = Object.keys(responseApi)[0];
+      const lastRegisters = responseApi[key];
+      navigation.navigate('ValueToday', { Nombre: item.label, UMedida: item.denominacion, ultimosRegistros: lastRegisters })
+    }
+
   }
 
   return (
     <View >
-      <Text style={styles.titleText}>Indicadores Economicos</Text>
       <FlatList
-        data={exanges}
+        data={exchanges}
         renderItem={({ item }) =>
           <View style={styles.listElement} >
             <Pressable style={styles.flex1} onPress={() => onPressExange(item)}>
@@ -56,7 +68,6 @@ const ExangeList = ({ navigation }: any) => {
                   tvParallaxProperties={null}
                 />
                 <Icon
-                  //name='info-outline'
                   name='keyboard-arrow-right'
                   type='MaterialIcons'
                   color='#898a88'

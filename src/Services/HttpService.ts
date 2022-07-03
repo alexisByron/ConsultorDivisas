@@ -40,7 +40,6 @@ class HttpService {
    */
   public async get<T>(route: string, params?: any): Promise<any> {
     route = `${route}?apikey=${Env.auth}&formato=json`
-    console.log(route)
     try {    
     const response = await this.instance.get<any>(route, { params });
       return handleSuccess(response);

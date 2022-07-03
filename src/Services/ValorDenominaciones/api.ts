@@ -1,11 +1,11 @@
 import HttpService from '../HttpService';
 
 /**
- * class client services
+ * class Api to get data
  */
 export class Api {
     /**
-     * Login a client in app
+     * get current value of a exchange
      * @param {string} divisa
      * @returns {Promise<any>}
      */
@@ -14,17 +14,26 @@ export class Api {
         return data;
     }
 
-    static async getValueByDate(divisa:string): Promise<any> {
+    /**
+     * get values of a exchange only in the month
+     * @param {string} divisa
+     * @returns {Promise<any>}
+     */
+    static async getValueByDate(divisa: string): Promise<any> {
         let today = new Date();
-        console.log(today.getFullYear());
         const data = await HttpService.get<any>(`/${divisa}/${today.getFullYear()}/${today.getMonth()}`);
         return data;
     }
 
-    static async getValueAfterDate(divisa:string): Promise<any> {
-        var myPastDate= new Date();
+    /**
+    * get values of a exchange from last 10 days
+    * @param {string} divisa
+    * @returns {Promise<any>}
+    */
+    static async getValueAfterDate(divisa: string): Promise<any> {
+        var myPastDate = new Date();
         myPastDate.setDate(myPastDate.getDate() - 10);//myPastDate is now 10 days in the past
-        const data = await HttpService.get<any>(`/${divisa}/posteriores/${myPastDate.getFullYear()}/${myPastDate.getMonth()}/dias/${myPastDate.getDate()}`);
+        const data = await HttpService.get<any>(`/${divisa}/posteriores/${myPastDate.getFullYear()}/${myPastDate.getMonth() + 1}/dias/${myPastDate.getDate()}`);
         return data;
     }
 }

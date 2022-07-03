@@ -5,8 +5,11 @@ import { styles } from './styles';
 interface dataInfo {
   info:[{Fecha:string, Valor: string}]
 }
+
+//Functional component to render a list
 const HistoryListComponent: React.FC<dataInfo> = ({info}) => {
   const history:any = info;
+
   return (
     <View style={{maxHeight:600}}>
       <FlatList
